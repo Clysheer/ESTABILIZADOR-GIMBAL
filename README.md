@@ -1,12 +1,22 @@
-# ESTABILIZADOR-GIMBAL
+ESTABILIZADOR - GIMBAL
+
 Proyecto de gimbal de tres ejes con Arduino Nano, IMU MPU6050 y servos SG90. Incluye PCB diseñada, firmware en C y estructura 3D en PLA. Estabiliza una cámara ligera compensando ±45° con un error menor a 3°, validando el control PID implementado.
-**Introducción**
-El objetivo principal de este trabajo fue diseñar y construir un gimbal electrónico de tres ejes capaz de mantener una cámara estable, compensando los movimientos involuntarios del usuario. Los gimbals son ampliamente utilizados en drones, cámaras portátiles y equipos de filmación profesional, debido a su capacidad para estabilizar la imagen incluso en condiciones dinámicas. La motivación para desarrollar este proyecto surgió de la necesidad creciente de capturar tomas fluidas y sin vibraciones, especialmente en aplicaciones audiovisuales y sistemas aéreos no tripulados.
-El desarrollo del gimbal permitió integrar y aplicar múltiples conocimientos adquiridos a lo largo de la tecnicatura, tales como electrónica analógica y digital, diseño de circuitos impresos (PCB), programación de microcontroladores, control automático y procesamiento de señales provenientes de sensores. Este enfoque interdisciplinario hizo posible comprender de manera global cómo distintos sistemas electrónicos pueden trabajar en conjunto para resolver un problema real.
-Desde un punto de vista teórico, la construcción del gimbal implicó estudiar conceptos fundamentales de análisis y control de sistemas dinámicos. Para lograr una estabilización eficiente fue necesario comprender el funcionamiento de sensores inerciales (IMU), específicamente el MPU6050, que combina un acelerómetro y un giroscopio de 3 ejes. Estos sensores permiten obtener información sobre la aceleración y la velocidad angular del dispositivo, datos que deben ser filtrados y procesados para estimar correctamente la orientación de la cámara. Se analizaron filtros complementarios y técnicas básicas de fusión sensorial para mejorar la precisión y reducir el ruido de las mediciones.
-Otro aspecto central del estudio fue el control PID (Proporcional, Integral y Derivativo), un algoritmo clásico en sistemas de control realimentados. Fue necesario comprender su funcionamiento, las funciones de cada uno de sus términos y cómo su ajuste influye directamente en la estabilidad y velocidad de respuesta del sistema. Se realizaron análisis teóricos sobre estabilidad, amortiguamiento, respuesta al escalón y efectos de la sintonización de parámetros Kp, Ki y Kd. Este controlador permitió corregir en tiempo real la diferencia entre la posición deseada y la posición medida, generando las señales necesarias para ajustar los ángulos de los servomotores.
-Asimismo, se estudiaron los principios de funcionamiento de los servomotores, particularmente su control mediante modulación por ancho de pulso (PWM). Se analizaron sus limitaciones mecánicas y eléctricas, torque disponible, velocidad de respuesta y resolución angular. También se evaluaron distintos configuraciones mecánicas y de soporte para garantizar la correcta transmisión del movimiento.
-La estructura mecánica del gimbal se diseñó mediante software CAD y luego fue fabricada mediante impresión 3D en PLA. Esto permitió estudiar conceptos de diseño mecánico, peso, distribución de masa, centro de gravedad y rigidez estructural, factores claves para garantizar que el sistema pueda estabilizarse correctamente sin introducir vibraciones.En conjunto, este proyecto representó una integración completa de teoría y práctica, abarcando áreas como control automático, electrónica digital, diseño de hardware, programación embebida y fabricación mecánica. El resultado final fue un sistema funcional capaz de estabilizar una cámara ligera, demostrando la importancia de la combinación entre conocimientos teóricos y aplicaciones prácticas.
+
+Introducción
+
+El objetivo principal de este trabajo fue diseñar y construir un gimbal electrónico de tres ejes capaz de mantener una cámara estable compensando los movimientos involuntarios del usuario. Los gimbals se utilizan ampliamente en drones, cámaras portátiles y equipos de filmación profesional debido a su capacidad para estabilizar la imagen incluso en condiciones dinámicas.
+La motivación para desarrollar este proyecto surgió de la necesidad de capturar tomas fluidas y sin vibraciones, especialmente en aplicaciones audiovisuales y sistemas aéreos no tripulados.
+
+El desarrollo del gimbal permitió integrar múltiples conocimientos adquiridos a lo largo de la tecnicatura: electrónica analógica y digital, diseño de PCB, programación de microcontroladores, control automático y procesamiento de señales de sensores. Este enfoque interdisciplinario permitió comprender cómo distintos sistemas pueden trabajar en conjunto para resolver un problema real.
+
+A nivel teórico, la construcción del gimbal implicó estudiar análisis y control de sistemas dinámicos. Para una estabilización eficiente fue necesario comprender el funcionamiento de sensores inerciales como el MPU6050, que combina acelerómetro y giroscopio de 3 ejes. Estos sensores permiten obtener información sobre aceleración y velocidad angular, datos que deben filtrarse y fusionarse para estimar la orientación del dispositivo mediante filtros complementarios.
+
+Otro aspecto clave fue la implementación del control PID (Proporcional, Integral y Derivativo). Se estudiaron los efectos de la sintonización de Kp, Ki y Kd, los criterios de estabilidad, amortiguamiento y respuesta dinámica. Este controlador permitió corregir en tiempo real la diferencia entre la posición deseada y la medida del sensor.
+
+La estructura mecánica se diseñó en software CAD e imprimió en 3D con PLA, estudiando conceptos como distribución de masa, rigidez estructural y centro de gravedad.
+
+El resultado final fue un sistema funcional capaz de estabilizar una cámara ligera, integrando control automático, electrónica digital, hardware, software embebido y diseño mecánico.
+
 Objetivos específicos
 ●   Diseñar y construir el circuito de control de los motores, integrando los servomotores y la electrónica necesaria para su funcionamiento.
 ●   Adquirir y procesar los datos del sensor inercial MPU6050 mediante comunicación I2C.
@@ -16,10 +26,14 @@ Objetivos específicos
 
 Se realizaron ajustes para poder tener los 3 servos bien colocados
 **Descripción del proyecto**
+
 **¿Qué es un Gimbal?**
+
 Un gimbal es un sistema de suspensión que permite mantener un objeto (como una cámara) estable y nivelado mientras se mueve. Utiliza motores o servomotores para contrarrestar los movimientos no deseados y estabilizar el objeto en cuestión. En este caso, el gimbal de 3 ejes se utiliza para estabilizar una cámara pequeña o dispositivo similar durante los movimientos en los tres ejes principales: Yaw (giro horizontal), Pitch (inclinación vertical) y Roll (rotación lateral).
 En lugar de usar un sistema mecánico pesado, un gimbal moderno utiliza sensores electrónicos y motores controlados electrónicamente para realizar ajustes en tiempo real. Esto permite una estabilización más precisa y dinámica, ideal para aplicaciones como la grabación de videos o fotografía aérea, donde la estabilidad es crucial.
+
 **Componentes principales del Gimbal**
+
 Servos
 En este proyecto, se usan tres servomotores para controlar el movimiento de la cámara en los tres ejes. Los servos son motores de corriente continua con un mecanismo de control que permite ajustar su ángulo de forma precisa. Cada servo se controla mediante una señal de modulación por ancho de pulso (PWM), donde el ancho del pulso determina el ángulo del servo.
 Los servos tienen la ventaja de ser fáciles de controlar mediante una señal PWM, lo que los hace ideales para proyectos como este, donde se requiere un control preciso de los movimientos. Sin embargo, los servos también tienen limitaciones en cuanto a la velocidad y torque, lo que debe ser considerado al diseñar el gimbal.
@@ -61,7 +75,9 @@ Como posible mejora, se podría usar motores brushless o stepper motors en lugar
 ●  Cables de interconexión - 2000
 ●  Batería de litio 3,7v - 3500
 ●  Precio estimado: 27.000 a 30.000
+
 **SOFTWARE**
+
 El software desarrollado para el gimbal electrónico de 3 ejes se encarga de leer los datos del sensor inercial MPU6050, procesarlos mediante algoritmos de filtrado, calcular los ángulos de orientación y ejecutar un control PID para ajustar la posición de los servomotores SG90 en tiempo real. El objetivo del software es garantizar que la cámara permanezca estable aun cuando el usuario realice movimientos bruscos.
 El firmware se implementó en lenguaje C/C++ utilizando el entorno de Arduino IDE y emplea librerías específicas para el manejo del sensor y los servos. Toda la lógica del control está optimizada para funcionar en un microcontrolador de recursos limitados como el Arduino Nano.
 Arquitectura general del software
@@ -73,8 +89,11 @@ El software se divide en los siguientes módulos principales:
 5.  Control PID para cada eje
 6.  Generación de señales PWM para los servomotores
 7.  Bucle principal (loop) en tiempo real
+
 <img width="255" height="645" alt="image" src="https://github.com/user-attachments/assets/1b4291a9-5131-499f-83e9-1309a1407efe" />
+
 **3. Descripción detallada de cada bloque**
+
 **3.1. Inicialización del sistema**
 En esta etapa se configuran:●  La comunicación I2C (Wire.h)
 ●  La velocidad de muestreo del MPU6050
@@ -82,6 +101,7 @@ En esta etapa se configuran:●  La comunicación I2C (Wire.h)
 ●  Variables internas del PID
 ●  Temporizadores para cálculos en tiempo real
 El sistema queda listo para funcionar dentro del loop principal.
+
 **3.2. Lectura del sensor MPU6050**
 El sensor proporciona:
 ●  Aceleración (Ax, Ay, Az)
@@ -90,12 +110,14 @@ La lectura se realiza a través de I2C y se normaliza a unidades físicas:
 ●  Acelerómetro → g (9.81 m/s²)
 ●  Giroscopio → °/s (grados por segundo)
 Estas señales suelen contener ruido, por eso necesitan filtrado.
+
 **3.3. Filtrado y Fusión de Datos**
 Para obtener una estimación precisa de los ángulos se utiliza un filtro complementario, que combina:
 ●  Los datos estables del acelerómetro●  La rapidez y suavidad del giroscopio
 El filtro realiza:
 Ángulo = 0.98*(Ángulo + gyro*dt) + 0.02*(Accel)
 Este método reduce vibraciones y evita errores acumulados.
+
 **3.4. Cálculo de Ángulos (Roll, Pitch y Yaw)**
 Del acelerómetro se obtienen roll y pitch mediante trigonometría:
 ●  Roll = atan2(Ay, Az)
